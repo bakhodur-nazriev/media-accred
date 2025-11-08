@@ -32,12 +32,48 @@ dist-ssr
 *.sw?
 .yarn
 
+# Frontend specific
+frontend/dist
+frontend/node_modules
+frontend/.env*
+!frontend/.env.example
+
+# Backend specific (Laravel)
+backend/vendor
+backend/node_modules
+backend/.env
+backend/.env.backup
+backend/.phpunit.result.cache
+backend/Homestead.json
+backend/Homestead.yaml
+backend/auth.json
+backend/npm-debug.log
+backend/yarn-error.log
+backend/.idea
+backend/.vscode
+backend/.fleet
+backend/.nova
+backend/storage/*.key
+backend/storage/logs/*
+!backend/storage/logs/.gitignore
+backend/storage/framework/cache/*
+!backend/storage/framework/cache/.gitignore
+backend/storage/framework/sessions/*
+!backend/storage/framework/sessions/.gitignore
+backend/storage/framework/testing/*
+!backend/storage/framework/testing/.gitignore
+backend/storage/framework/views/*
+!backend/storage/framework/views/.gitignore
+backend/bootstrap/cache/*
+!backend/bootstrap/cache/.gitignore
+
 # iconify dist files
-src/plugins/iconify/icons.css
+frontend/src/plugins/iconify/icons.css
 
 # Ignore MSW script
-public/mockServiceWorker.js
+frontend/public/mockServiceWorker.js
 
 # Env files
 .env*
 !.env.example
+
