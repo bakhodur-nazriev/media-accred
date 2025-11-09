@@ -4,7 +4,6 @@ import navItems from '@/navigation/horizontal'
 import { themeConfig } from '@themeConfig'
 
 // Components
-import Footer from '@/layouts/components/Footer.vue'
 import NavBarNotifications from '@/layouts/components/NavBarNotifications.vue'
 import NavSearchBar from '@/layouts/components/NavSearchBar.vue'
 import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue'
@@ -68,13 +67,5 @@ watch([isFallbackStateActive, refLoadingIndicator], () => {
         <Component :is="Component" />
       </Suspense>
     </RouterView>
-
-    <!-- 👉 Footer -->
-    <template #footer>
-      <Footer />
-    </template>
-
-    <!-- 👉 Customizer -->
-    <TheCustomizer />
   </HorizontalNavLayout>
 </template>

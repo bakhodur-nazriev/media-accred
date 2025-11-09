@@ -1,41 +1,37 @@
 <script lang="ts" setup>
-import type { ProfileHeader } from '@db/pages/profile/types'
+const userData = useCookie<any>('userData')
 
-const profileHeaderData = ref<ProfileHeader>()
-
-const { data, error } = await useApi<ProfileHeader>('/pages/profile/header')
-
-if (error.value) {
-  console.log(error.value)
+const roleLabels: Record<string, string> = {
+  admin: 'Администратор',
+  moderator: 'Модератор',
 }
-else {
-  if (data.value)
-    profileHeaderData.value = data.value
-}
+
+const roleLabel = computed(() => {
+  if (userData.value?.role)
+    return roleLabels[userData.value.role] || userData.value.role
+  return ''
+})
 </script>
 
 <template>
-  <VCard v-if="profileHeaderData">
-    <VImg
-      :src="profileHeaderData.coverImg"
-      min-height="125"
-      max-height="250"
-      cover
-    />
-
+  <VCard v-if="userData">
     <VCardText class="d-flex align-bottom flex-sm-row flex-column justify-center gap-x-5">
       <div class="d-flex h-0">
         <VAvatar
           rounded
           size="120"
-          :image="profileHeaderData.profileImg"
           class="user-profile-avatar mx-auto"
-        />
+        >
+          <VIcon
+            size="60"
+            icon="tabler-user"
+          />
+        </VAvatar>
       </div>
 
       <div class="user-profile-info w-100 mt-16 pt-6 pt-sm-0 mt-sm-0">
         <h5 class="text-h5 text-center text-sm-start font-weight-medium mb-3">
-          {{ profileHeaderData?.fullName }}
+          {{ userData.name || 'Пользователь' }}
         </h5>
 
         <div class="d-flex align-center justify-center justify-sm-space-between flex-wrap gap-4">
@@ -43,40 +39,25 @@ else {
             <span class="d-flex">
               <VIcon
                 size="20"
-                icon="tabler-color-swatch"
+                icon="tabler-user-circle"
                 class="me-1"
               />
               <span class="text-body-1">
-                {{ profileHeaderData?.designation }}
+                {{ roleLabel }}
               </span>
             </span>
 
             <span class="d-flex">
               <VIcon
                 size="20"
-                icon="tabler-map-pin"
+                icon="tabler-mail"
                 class="me-1"
               />
               <span class="text-body-1">
-                {{ profileHeaderData?.location }}
-              </span>
-            </span>
-
-            <span class="d-flex">
-              <VIcon
-                size="20"
-                icon="tabler-calendar"
-                class="me-1"
-              />
-              <span class="text-body-1">
-                {{ profileHeaderData?.joiningDate }}
+                {{ userData.email }}
               </span>
             </span>
           </div>
-
-          <VBtn prepend-icon="tabler-check">
-            Connected
-          </VBtn>
         </div>
       </div>
     </VCardText>

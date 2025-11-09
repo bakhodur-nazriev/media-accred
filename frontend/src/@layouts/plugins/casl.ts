@@ -18,6 +18,10 @@ export const can = (action: string | undefined, subject: string | undefined) => 
   if (!vm)
     return false
 
+  // If action and subject are not defined, allow access (public item)
+  if (!action && !subject)
+    return true
+
   const localCan = vm.proxy && '$can' in vm.proxy
 
   // @ts-expect-error We will get TS error in below line because we aren't using $can in component instance

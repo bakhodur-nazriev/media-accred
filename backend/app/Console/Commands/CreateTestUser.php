@@ -13,7 +13,7 @@ class CreateTestUser extends Command
      *
      * @var string
      */
-    protected $signature = 'user:create-test {--email=admin@demo.com} {--password=admin} {--name=Admin}';
+    protected $signature = 'user:create-test {--email=admin@demo.com} {--password=admin} {--name=Admin} {--role=admin}';
 
     /**
      * The console command description.
@@ -30,16 +30,26 @@ class CreateTestUser extends Command
         $email = $this->option('email');
         $password = $this->option('password');
         $name = $this->option('name');
+        $role = $this->option('role');
+
+        // Validate role
+        if (!in_array($role, ['admin', 'moderator'])) {
+            $this->error("Role must be 'admin' or 'moderator'");
+            return 1;
+        }
 
         // Check if user already exists
         $existingUser = User::where('email', $email)->first();
 
         if ($existingUser) {
             $this->warn("User with email {$email} already exists.");
-            if ($this->confirm('Do you want to update the password?', false)) {
+            if ($this->confirm('Do you want to update the password and role?', false)) {
                 $existingUser->password = Hash::make($password);
+                $existingUser->role = $role;
+                $existingUser->name = $name;
                 $existingUser->save();
-                $this->info("Password updated for user: {$email}");
+                $this->info("User updated: {$email}");
+                $this->line("Role: {$role}");
             }
             return 0;
         }
@@ -48,12 +58,14 @@ class CreateTestUser extends Command
             'name' => $name,
             'email' => $email,
             'password' => Hash::make($password),
+            'role' => $role,
         ]);
 
         $this->info("Test user created successfully!");
         $this->line("Email: {$email}");
         $this->line("Password: {$password}");
         $this->line("Name: {$name}");
+        $this->line("Role: {$role}");
 
         return 0;
     }

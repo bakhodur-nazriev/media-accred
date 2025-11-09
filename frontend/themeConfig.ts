@@ -10,7 +10,7 @@ import { AppContentLayoutNav, ContentWidth, FooterType, NavbarType } from '@layo
 
 export const { themeConfig, layoutConfig } = defineThemeConfig({
   app: {
-    title: 'vuexy',
+    title: 'MediaAccred',
     logo: h('div', { innerHTML: logo, style: 'line-height:0; color: rgb(var(--v-global-theme-primary))' }),
     contentWidth: ContentWidth.Boxed,
     contentLayoutNav: AppContentLayoutNav.Vertical,
@@ -25,14 +25,14 @@ export const { themeConfig, layoutConfig } = defineThemeConfig({
           isRTL: false,
         },
         {
-          label: 'French',
-          i18nLang: 'fr',
+          label: 'Русский',
+          i18nLang: 'ru',
           isRTL: false,
         },
         {
-          label: 'Arabic',
-          i18nLang: 'ar',
-          isRTL: true,
+          label: 'Тоҷикӣ',
+          i18nLang: 'tg',
+          isRTL: false,
         },
       ],
     },

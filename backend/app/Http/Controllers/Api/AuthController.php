@@ -25,6 +25,7 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => $request->role ?? 'moderator', // По умолчанию модератор
         ]);
 
         $token = $user->createToken('auth_token')->plainTextToken;
@@ -36,7 +37,9 @@ class AuthController extends Controller
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
+                'role' => $user->role,
             ],
+            'userAbilityRules' => $this->getAbilityRules($user->role),
         ], 201);
     }
 
@@ -67,8 +70,9 @@ class AuthController extends Controller
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
+                'role' => $user->role,
             ],
-            'userAbilityRules' => [], // Можно добавить правила для CASL позже
+            'userAbilityRules' => $this->getAbilityRules($user->role),
         ]);
     }
 
@@ -89,12 +93,39 @@ class AuthController extends Controller
      */
     public function user(Request $request)
     {
+        $user = $request->user();
+        
         return response()->json([
             'userData' => [
-                'id' => $request->user()->id,
-                'name' => $request->user()->name,
-                'email' => $request->user()->email,
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'role' => $user->role,
             ],
+            'userAbilityRules' => $this->getAbilityRules($user->role),
         ]);
+    }
+
+    /**
+     * Get ability rules based on user role
+     */
+    private function getAbilityRules(string $role): array
+    {
+        // Админ может все
+        if ($role === 'admin') {
+            return [
+                ['action' => 'manage', 'subject' => 'all'],
+            ];
+        }
+
+        // Модератор пока что тоже может все (потом настроим)
+        if ($role === 'moderator') {
+            return [
+                ['action' => 'manage', 'subject' => 'all'],
+            ];
+        }
+
+        // По умолчанию нет прав
+        return [];
     }
 }
